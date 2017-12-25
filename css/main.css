@@ -494,3 +494,9 @@ input:checked + label {
 background: #7ead45;
 color: #fff;
 }
+.count_consuming > input[type="radio"] ~ *{
+display: none;
+}
+.count_consuming > input[type="radio"]:checked ~ *{
+display: inline-block;
+}

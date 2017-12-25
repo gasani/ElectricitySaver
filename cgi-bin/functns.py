@@ -11,7 +11,7 @@ def average(t):
 
             if row['\ufeffОбъект'] == t:
 
-                return( float( row['Средние значения, кВт*ч'] ) )
+                return( float( row['Средние значения, кВт*ч'].replace(',', '.') ) )
 
 def get_rest_of_sum(total, reserved):
 
