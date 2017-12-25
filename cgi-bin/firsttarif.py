@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import cgi, os
+import cgi, os, ckks
 import numpy
 tarifform = cgi.FieldStorage()
 plate = int(tarifform.getfirst("plate"))
@@ -26,34 +26,35 @@ else:
     tar = str(r[0][0])
     dif = q-n	
 	
-print("Content-type: text/html\n")
-print("""<!DOCTYPE html>
+log = ckks.set_cookies()
+print("""Content-type: text/html\n
+<!DOCTYPE html>
 <html lang="ru">
 	<head>
 		<meta charset="windows-1251">
-		<title>Калькулятор платы за электроэнергию - Нижний Новгород</title>
+		<title>Законы и формулы - Электрономия Нижний Новгород</title>
 		<link rel="stylesheet" href="../css/main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/cbpFixedScrollLayout.min.js"></script>
 	<script type="text/javascript">
-	$(function() {
-	$(window).scroll(function() {
-	if($(this).scrollTop() != 0) {
+	$(function() {{
+	$(window).scroll(function() {{
+	if($(this).scrollTop() != 0) {{
 	$('#toTop').fadeIn();
-	} else {
+	}} else {{
 	$('#toTop').fadeOut();
-	}
-	});
-	$('#toTop').click(function() {
-	$('body,html').animate({scrollTop:0},800);
-	});
-	});
+	}}
+	}});
+	$('#toTop').click(function() {{
+	$('body,html').animate({{scrollTop:0}},800);
+	}});
+	}});
 	</script>
 	<script>
-		$(function() {
+		$(function() {{
 			cbpFixedScrollLayout.init();
-		});
+		}});
 	</script>	
 	</head>
 	<body id="top">
@@ -62,17 +63,17 @@ print("""<!DOCTYPE html>
 	<div class="logo"><a href="index.html"><img height="60px" src="https://pp.userapi.com/c841535/v841535312/4be95/yD1jwSa4X2A.jpg"></a></div>
 	
 	<div class="nav"><ul>
-		<li class="current"><a href="../index.html" >ГЛАВНАЯ</a></li>
-		<li><a href="../data.html">ТАРИФЫ И НОРМАТИВЫ</a></li>
-        <li><a href="../calculator.html">КАЛЬКУЛЯТОР ЭЛЕКТРОЭНЕРГИИ</a></li>
-		<li><a href="../information.html">ПОЛЕЗНАЯ ИНФОРМАЦИЯ</a></li>
-		<li><a href="login.py">ВХОД</a></li>
-		<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>
+		<li><a href="data.py?p=index" >ГЛАВНАЯ</a></li>
+		<li><a class="current" href="data.py?p=data">ТАРИФЫ И НОРМАТИВЫ</a></li>
+        <li><a href="calculator.py">КАЛЬКУЛЯТОР ЭЛЕКТРОЭНЕРГИИ</a></li>
+		<li><a href="data.py?p=information">СПРАВОЧНАЯ ИНФОРМАЦИЯ</a></li>
+		<li><a href="login.py">{}</a></li>
+		{}
             </ul></div>
-    </div>	
+    </div>
 	<section id="hello">
 	</section>
-	<div class="wide-block"><table><tr>""")
+	<div class="wide-block"><table><tr>""".format( log.upper() if log else 'ВХОД', '<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>' if not log else '' )) 
 print ("""<fieldset> 
 			<legend><p class="header">ИТОГ</p></legend>""")
 print ("<p>Ваш текущий тариф: {} р/кВт*ч</p>".format(tar)) 		

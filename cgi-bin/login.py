@@ -3,7 +3,7 @@ import fileinput, sys, cgi, ckks, csv
 loginform = cgi.FieldStorage()
 
 log = ckks.set_cookies()
-print("""Content-type: text/html\n
+header = """Content-type: text/html\n
 <!DOCTYPE html>
 <html lang="ru">
 	<head>
@@ -14,23 +14,23 @@ print("""Content-type: text/html\n
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/cbpFixedScrollLayout.min.js"></script>
 	<script type="text/javascript">
-	$(function() {
-	$(window).scroll(function() {
-	if($(this).scrollTop() != 0) {
+	$(function() {{
+	$(window).scroll(function() {{
+	if($(this).scrollTop() != 0) {{
 	$('#toTop').fadeIn();
-	} else {
+	}} else {{
 	$('#toTop').fadeOut();
-	}
-	});
-	$('#toTop').click(function() {
-	$('body,html').animate({scrollTop:0},800);
-	});
-	});
+	}}
+	}});
+	$('#toTop').click(function() {{
+	$('body,html').animate({{scrollTop:0}},800);
+	}});
+	}});
 	</script>
 	<script>
-		$(function() {
+		$(function() {{
 			cbpFixedScrollLayout.init();
-		});
+		}});
 	</script>	
 	</head>
 	<body id="top">
@@ -39,17 +39,17 @@ print("""Content-type: text/html\n
 	<div class="logo"><a href="index.html"><img height="60px" src="https://pp.userapi.com/c841535/v841535312/4be95/yD1jwSa4X2A.jpg"></a></div>
 	
 	<div class="nav"><ul>
-		<li><a href="../index.html" >ГЛАВНАЯ</a></li>
-		<li><a class="current" href="../data.html">ТАРИФЫ И НОРМАТИВЫ</a></li>
+		<li><a href="data.py?p=index" >ГЛАВНАЯ</a></li>
+		<li><a class="current" href="data.py?p=data">ТАРИФЫ И НОРМАТИВЫ</a></li>
         <li><a href="calculator.py">КАЛЬКУЛЯТОР ЭЛЕКТРОЭНЕРГИИ</a></li>
-		<li><a href="../information.html">СПРАВОЧНАЯ ИНФОРМАЦИЯ</a></li>
-		<li><a href="login.py">ВХОД</a></li>
-		<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>
+		<li><a href="data.py?p=information">СПРАВОЧНАЯ ИНФОРМАЦИЯ</a></li>
+		<li><a href="login.py">{}</a></li>
+		{}
             </ul></div>
     </div>
 	<section id="hello">
 	</section>
-	<div class="wide-block"><table><tr>""")
+	<div class="wide-block"><table><tr>""".format( log.upper() if log else 'ВХОД', '<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>' if not log else '' ) 
 	
 		
 if log:
@@ -98,7 +98,7 @@ if log:
 				if row and row[0] == log:
 					
 					plate, water, people, rooms, counter = map(int, row[2:])
-				
+	print(header)			
 	print("""<form action="" method="post">
 					<fieldset>
 	<p class="header"><b>Ваш тип плиты:</b></p>
@@ -139,10 +139,15 @@ else:
 
 	if log and ckks.validation(log, pswd):
 	
-		ckks.set_cookies(log)	
-		#загрузить лк
+		ckks.set_cookies(log)
+		print("""Content-type: text/html\n
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="windows-1251"><meta http-equiv="refresh" content="0; url=login.py" />\r\n""")
 
 	else:
+		print(header)
 		print("""<div class="wide-block"><form action="" method="post">
 					<p><b>Введите логин и пароль:</b></p>
 					<p>Логин:<label><input type="text" name="login" required></label></p>

@@ -1,39 +1,39 @@
 #!/usr/bin/env python3
-import cgi, os
+import cgi, os, ckks
 tarifform = cgi.FieldStorage()
 plate = int(tarifform.getfirst("plate"))
 water = int(tarifform.getfirst("water"))
 people = int(tarifform.getfirst("people"))
 rooms = int(tarifform.getfirst("rooms"))
-
-print("Content-type: text/html\n")
-print("""<!DOCTYPE html>
+log = ckks.set_cookies()
+print("""Content-type: text/html\n
+<!DOCTYPE html>
 <html lang="ru">
 	<head>
 		<meta charset="windows-1251">
-		<title>Калькулятор платы за электроэнергию - Нижний Новгород</title>
+		<title>Законы и формулы - Электрономия Нижний Новгород</title>
 		<link rel="stylesheet" href="../css/main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/cbpFixedScrollLayout.min.js"></script>
 	<script type="text/javascript">
-	$(function() {
-	$(window).scroll(function() {
-	if($(this).scrollTop() != 0) {
+	$(function() {{
+	$(window).scroll(function() {{
+	if($(this).scrollTop() != 0) {{
 	$('#toTop').fadeIn();
-	} else {
+	}} else {{
 	$('#toTop').fadeOut();
-	}
-	});
-	$('#toTop').click(function() {
-	$('body,html').animate({scrollTop:0},800);
-	});
-	});
+	}}
+	}});
+	$('#toTop').click(function() {{
+	$('body,html').animate({{scrollTop:0}},800);
+	}});
+	}});
 	</script>
 	<script>
-		$(function() {
+		$(function() {{
 			cbpFixedScrollLayout.init();
-		});
+		}});
 	</script>	
 	</head>
 	<body id="top">
@@ -42,15 +42,16 @@ print("""<!DOCTYPE html>
 	<div class="logo"><a href="index.html"><img height="60px" src="https://pp.userapi.com/c841535/v841535312/4be95/yD1jwSa4X2A.jpg"></a></div>
 	
 	<div class="nav"><ul>
-		<li class="current"><a href="../index.html" >ГЛАВНАЯ</a></li>
-		<li><a href="../data.html">ТАРИФЫ И НОРМАТИВЫ</a></li>
-        <li><a href="../calculator.html">КАЛЬКУЛЯТОР ЭЛЕКТРОЭНЕРГИИ</a></li>
-		<li><a href="../information.html">ПОЛЕЗНАЯ ИНФОРМАЦИЯ</a></li>
-		<li><a href="login.py">ВХОД</a></li>
-		<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>
+		<li><a href="data.py?p=index" >ГЛАВНАЯ</a></li>
+		<li><a class="current" href="data.py?p=data">ТАРИФЫ И НОРМАТИВЫ</a></li>
+        <li><a href="calculator.py">КАЛЬКУЛЯТОР ЭЛЕКТРОЭНЕРГИИ</a></li>
+		<li><a href="data.py?p=information">СПРАВОЧНАЯ ИНФОРМАЦИЯ</a></li>
+		<li><a href="login.py">{}</a></li>
+		{}
             </ul></div>
-    </div>	
-	<section id="hello">
+    </div>
+""".format( log.upper() if log else 'ВХОД', '<li><a href="register.py">РЕГИСТРАЦИЯ</a></li>' if not log else '' ) )
+print("""<section id="hello">
 	</section>
 	<div class="wide-block"><table><tr>
 	<fieldset><img src="../img/3.png" width="100%"></fieldset>""")
@@ -62,39 +63,8 @@ print("""		<fieldset>
 				<label class="labelform2"><input type="radio" name="counter" value=2>Двухставочный</label>
 				<label class="labelform2"><input type="radio" name="counter" value=3>Трехставочный</label>
 				<label class="labelform2"><input type="radio" name="counter" value=4>Нет счетчика</label></p>""")
-				
-if plate == 0 and water == 0:				
-   print("""<input type="hidden" name="plate" value=0>
-   <input type="hidden" name="water" value=0>""")
-if plate == 0 and water == 1:				
-   print("""<input type="hidden" name="plate" value=0>
-   <input type="hidden" name="water" value=1>""") 
-if plate == 1 and water == 0:				
-   print("""<input type="hidden" name="plate" value=1>
-   <input type="hidden" name="water" value=0>""")
-if plate == 1 and water == 1:				
-   print("""<input type="hidden" name="plate" value=1>
-   <input type="hidden" name="water" value=1>""")
-   
-if people == 1:				
-   print("""<input type="hidden" name="people" value=1>""")
-if people == 2:				
-   print("""<input type="hidden" name="people" value=2>""")
-if people == 3:				
-   print("""<input type="hidden" name="people" value=3>""")
-if people == 4:				
-   print("""<input type="hidden" name="people" value=4>""")
-if people == 5:				
-   print("""<input type="hidden" name="people" value=5>""")
-
-if rooms == 1:				
-   print("""<input type="hidden" name="rooms" value=1>""") 
-if rooms == 2:				
-   print("""<input type="hidden" name="rooms" value=2>""")
-if rooms == 3:				
-   print("""<input type="hidden" name="rooms" value=3>""")
-if rooms == 4:				
-   print("""<input type="hidden" name="rooms" value=4>""")
+for fieldn in ('plate', 'water', 'people', 'rooms'):
+	print("""<input type="hidden" name="{}" value={}>""".format(fieldn, globals()[fieldn]) )			
    
 print("""				<p><button type="submit" />Узнать тариф</button></p>
 				</form>
