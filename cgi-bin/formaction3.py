@@ -1,12 +1,31 @@
 #!/usr/bin/env python3
 import cgi, os
 import numpy
+import ckks, csv
+
+loginform = cgi.FieldStorage()
+
+log = ckks.set_cookies()
+
 tarifform = cgi.FieldStorage()
-plate = int(tarifform.getfirst("plate"))
-water = int(tarifform.getfirst("water"))
-people = int(tarifform.getfirst("people"))
-rooms = int(tarifform.getfirst("rooms"))
-counter = int(tarifform.getfirst("counter"))
+
+if log:
+
+	with open('userdb.csv', 'r', encoding = 'utf-8') as csvfile:
+	
+		reader = csv.reader(csvfile)
+		
+		for row in reader:
+		
+			if row and row[0] == log:
+			
+				plate, water, people, rooms, counter = map(int, row[2:])
+else:
+	plate = int(tarifform.getfirst("plate"))
+	water = int(tarifform.getfirst("water"))
+	people = int(tarifform.getfirst("people"))
+	rooms = int(tarifform.getfirst("rooms"))
+	counter = int(tarifform.getfirst("counter"))
 n = 85+(50*(people-1))
 normals = [[103,64,49,40,35],[133,82,64,52,45],[150,93,72,59,51],[162,101,78,63,55],[153,95,73,60,52],[180,112,87,70,61],[197,122,95,77,67],[209,130,101,82,71],
            [174,108,84,68,59],[225,139,108,88,76],[255,158,122,99,87],[276,171,132,107,94],[224,139,108,88,76],[265,164,127,103,90],[289,179,139,113,98],[307,191,148,120,105]]
